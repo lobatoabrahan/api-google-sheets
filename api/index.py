@@ -1,9 +1,18 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 def create_app():
     app = FastAPI()
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # Use the service account credentials to access the Google Sheets API
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']

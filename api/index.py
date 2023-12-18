@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 # Define your data models with Pydantic
 class Employee(BaseModel):

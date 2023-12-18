@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+
+# Define your data models with Pydantic
+class Employee(BaseModel):
+    name: str
+    role: str
 
 def create_app():
     app = FastAPI()
@@ -29,9 +34,9 @@ def create_app():
         return {"data": records}
     
     @app.post("/empleados")
-    async def create_employee(name: str, role: str):
+    async def create_employee(employee: Employee):
         # Append a new record to the Google Spreadsheet
-        sheet.worksheet("empleados").append_row([name, role])
+        sheet.worksheet("empleados").append_row([employee.name, employee.role])
         return {"message": "Employee created"}
 
     return app

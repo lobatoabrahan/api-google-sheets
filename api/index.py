@@ -1,13 +1,8 @@
+# index.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
-# Define your data models with Pydantic
-class Employee(BaseModel):
-    name: str
-    role: str
+from .empleados import router as empleado_router
+from .auth import router as auth_router
 
 def create_app():
     app = FastAPI()
@@ -20,25 +15,8 @@ def create_app():
         allow_headers=["*"],
     )
 
-    # Use the service account credentials to access the Google Sheets API
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('./api/keys.json', scope)
-    client = gspread.authorize(creds)
-
-    # Open the Google Spreadsheet by its name
-    sheet = client.open("asistencia")
-
-    @app.get("/empleados")
-    async def get_records():
-        # Get all records from the Google Spreadsheet
-        records = sheet.worksheet("empleados").get_all_records()
-        return {"data": records}
-    
-    @app.post("/empleados")
-    async def create_employee(employee: Employee):
-        # Append a new record to the Google Spreadsheet
-        sheet.worksheet("empleados").append_row([employee.name, employee.role])
-        return {"message": "Employee created"}
+    app.include_router(empleado_router)
+    app.include_router(auth_router)
 
     return app
 

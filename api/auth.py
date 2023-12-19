@@ -17,6 +17,10 @@ class Usuario(BaseModel):
     empresa: str
     fecha_creacion: datetime = datetime.now()
     fecha_actualizacion: datetime = datetime.now()
+    
+class Login(BaseModel):
+    usuario: str
+    contraseña: str
 
 router = APIRouter()
 
@@ -39,7 +43,7 @@ async def create_user(user: Usuario):
     return {"message": "User created successfully"}
 
 @router.post("/login")
-async def login(user: Usuario):
+async def login(user: Login):
     u = find_user(user.usuario)
     if u and user.contraseña == u['contraseña']:
         expiry = datetime.utcnow() + timedelta(days=7)

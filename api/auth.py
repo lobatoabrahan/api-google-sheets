@@ -47,7 +47,7 @@ async def login(user: Login):
     u = find_user(user.usuario)
     if u and user.contraseña == u['contraseña']:
         expiry = datetime.utcnow() + timedelta(days=7)
-        return {"token": u['id'], "expiry": expiry.isoformat()}
+        return {"token": u['id_usuario'], "expiry": expiry.isoformat()}
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Incorrect username or password",

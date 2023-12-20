@@ -56,7 +56,7 @@ async def login(user: Login):
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     u = find_user(token)
-    if u and datetime.fromisoformat(u['expiry']) > datetime.utcnow():
+    if u:
         return u
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

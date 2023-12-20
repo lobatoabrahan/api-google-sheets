@@ -36,6 +36,13 @@ def find_user(username: str):
             return u
     return None
 
+def find_user_by_id(id: str):
+    users = sheet.worksheet("usuario").get_all_records()
+    for u in users:
+        if u['id_usuario'] == id:
+            return u
+    return None
+
 @router.post("/crear_usuario")
 async def create_user(user: Usuario):
     # Store the password without hashing
@@ -55,7 +62,7 @@ async def login(user: Login):
     )
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    u = find_user(token)
+    u = find_user_by_id(token)
     if u:
         return u
     raise HTTPException(

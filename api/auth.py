@@ -77,7 +77,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.get("/users/me")
+@router.get("/usuario/{id}")
 async def read_users_me(current_user: str = Depends(get_current_user)):
     user = find_user_by_id(current_user)
     if user:
@@ -87,13 +87,13 @@ async def read_users_me(current_user: str = Depends(get_current_user)):
         detail="User not found",
     )
     
-@router.get("/users")
+@router.get("/usuarios")
 async def read_users():
     try:
         users = sheet.worksheet("usuario").get_all_records()
         # No incluir las contraseñas en la respuesta
         for user in users:
-            del user['password']
+            del user['contraseña']
         return users
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

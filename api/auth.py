@@ -3,9 +3,9 @@ from fastapi import Depends, FastAPI, HTTPException, status, APIRouter
 from pydantic import BaseModel
 from .sheets import connect_to_sheet
 from uuid import uuid4
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from fastapi.security import OAuth2PasswordBearer
-from datetime import datetime, timedelta
+
 class Usuario(BaseModel):
     id: str = str(uuid4())
     usuario: str

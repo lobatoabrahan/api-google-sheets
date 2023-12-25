@@ -51,26 +51,49 @@ async def create_user(user: Usuario):
 
 @router.post("/login")
 async def login(user: Login):
-    u = find_user(user.usuario)
-    if u and user.contraseña == u['contraseña']:
-        expiry = datetime.utcnow() + timedelta(days=7)
-        return {"token": u['id_usuario'], "expiry": expiry.isoformat(), "role":u['id_rol']}
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect username or password",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+    try:
+        u = find_user(user.usuario)
+        if u and user.contraseña == u['contraseña']:
+            expiry = datetime.utcnow() + timedelta(days=7)
+            return {"token": u['id_usuario'], "expiry": expiry.isoformat(), "role":u['id_rol']}
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    u = find_user_by_id(token)
-    if u:
-        return u
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid authentication credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+    try:
+        u = find_user_by_id(token)
+        if u:
+            return u
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.get("/users/{id}")
+@router.get("/users/me")
 async def read_users_me(current_user: str = Depends(get_current_user)):
-    return current_user
+    user = find_user_by_id(current_user)
+    if user:
+        return user
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="User not found",
+    )
+    
+@router.get("/users")
+async def read_users():
+    try:
+        users = sheet.worksheet("usuario").get_all_records()
+        # No incluir las contraseñas en la respuesta
+        for user in users:
+            del user['password']
+        return users
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

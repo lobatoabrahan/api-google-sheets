@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .empleados import router as empleado_router
 from .auth import router as auth_router
 from .materia_prima import router as materia_prima_router
+from .productos import router as producto_router
 
 def create_app():
     app = FastAPI()
@@ -19,6 +20,7 @@ def create_app():
     app.include_router(empleado_router)
     app.include_router(auth_router)
     app.include_router(materia_prima_router)
+    app.include_router(producto_router)
     
     return app
 

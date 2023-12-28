@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status, APIRouter
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from .sheets import connect_to_sheet
 from uuid import uuid4
 from datetime import datetime, date, timedelta
-from typing import Dict
+from typing import Dict, List
 
 class Bobina(BaseModel):
     id: str = str(uuid4())
@@ -11,7 +11,7 @@ class Bobina(BaseModel):
     categoria: str
     ancho: int
     espesor: int
-    mezcla: []
+    mezcla: List[str] = []
     cof: int
     fecha_creacion: datetime = datetime.now()
     fecha_actualizacion: datetime = datetime.now()

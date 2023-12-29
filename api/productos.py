@@ -26,9 +26,9 @@ class Bolsa(BaseModel):
     largo: int
     cantidad_por_paquete: int
     
-    class Trazabilidad(BaseModel):
-        id_producto: str
-        id_producto_proveniente: str
+class Trazabilidad(BaseModel):
+    id_producto: str
+    id_producto_proveniente: str
 
 router = APIRouter()
 

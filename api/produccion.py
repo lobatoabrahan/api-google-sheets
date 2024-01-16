@@ -35,13 +35,13 @@ async def crear_registro_extrusion(
     try:
         worksheet = sheet.worksheet("productos")
         last_row = len(worksheet.get_all_values()) + 1
-        worksheet.update(f"C{last_row}", fecha.strftime("%d/%m/%Y"))
+        worksheet.update(f"C{last_row}", fecha)
         worksheet.update(f"D{last_row}", turno)
         worksheet.update(f"E{last_row}", operador)
         worksheet.update(f"F{last_row}", extrusora)
         worksheet.update(f"G{last_row}", lote)
         worksheet.update(f"J{last_row}", numero_bobina)
-        worksheet.update(f"K{last_row}", hora.strftime("%H:%M"))
+        worksheet.update(f"K{last_row}", hora)
         worksheet.update(f"L{last_row}", kg)
         worksheet.update(f"M{last_row}", empates)
         worksheet.update(f"N{last_row}", estatus)

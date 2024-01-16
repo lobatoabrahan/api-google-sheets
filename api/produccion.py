@@ -4,13 +4,13 @@ from .sheets import connect_to_sheet
 from datetime import date, time, datetime
 
 class Registro_Extrusion(BaseModel):
-    fecha: date
+    fecha: str
     turno: str
     operador: str
     extrusora: int
     lote: int
     numero_bobina: int
-    hora: time
+    hora: str
     kg: float
     empates: int
     estatus: str
@@ -21,13 +21,13 @@ sheet = connect_to_sheet("registro_produccion")
 
 @router.post("/crear_registro_extrusion")
 async def crear_registro_extrusion(
-    fecha: datetime = Form(...),
+    fecha: str = Form(...),
     turno: str = Form(...),
     operador: str = Form(...),
     extrusora: str = Form(...),
     lote: str = Form(...),
     numero_bobina: str = Form(...),
-    hora: datetime = Form(...),
+    hora: str = Form(...),
     kg: float = Form(...),
     empates: int = Form(...),
     estatus: str = Form(...)

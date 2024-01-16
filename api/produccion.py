@@ -33,7 +33,7 @@ async def crear_registro_extrusion(
     estatus: str = Form(...)
 ):
     try:
-        worksheet = sheet.worksheet("productos")
+        worksheet = sheet.worksheet("registro_extrusion")
         last_row = len(worksheet.get_all_values()) + 1
         worksheet.update(f"C{last_row}", fecha)
         worksheet.update(f"D{last_row}", turno)
